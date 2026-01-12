@@ -1,2 +1,2 @@
 # Zepto-Clone
-Zepto Clone using html , css ,js and backened
+Zepto Clone using html , css ,js and backend
