@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Cafe | Zepto Clone</title>
+<link rel="icon" href="../images/favicon.jpg">
+<link rel="stylesheet" href="../common.css">
+<style>
+
+/* ===== LAYOUT ===== */
+.page{
+    display:flex;
+    padding:20px 40px;
+    gap:25px;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+    width:230px;
+}
+
+.sidebar h3{
+    margin-bottom:15px;
+}
+
+.side-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    cursor:pointer;
+    border-radius:10px;
+    color:#444;
+}
+
+.side-item.active{
+    background:#f4e8ff;
+    color:#6a00ff;
+    font-weight:600;
+}
+
+.side-item img{
+    width:40px;          /* bigger icon */
+    height:40px;
+    object-fit:cover;
+    border-radius:10px;  /* soft rounded like Zepto */
+}
+
+
+/* ===== MAIN CONTENT ===== */
+.main-content{
+    flex:1;
+}
+
+/* ===== BANNERS ===== */
+.banner-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.banner-row img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 18px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.banner-row img:hover {
+    transform: scale(1.05); /* slightly pop up */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* subtle shadow */
+}
+
+
+/* ===== PRODUCT SECTION ===== */
+.section-title{
+    font-size:22px;
+    margin:25px 0 15px;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:18px;
+}
+
+/* ===== PRODUCT CARD ===== */
+.product-card{
+    border:1px solid #6b6868;
+    border-radius:16px;
+    padding:10px;
+    position:relative;
+}
+
+.product-card img{
+    width:100%;
+    height:150px;              /* 👈 bigger */
+    object-fit:fill;
+    border-radius:20px;        /* 👈 rounded */
+    background:#e4e2e2;        /* 👈 Zepto-style bg */
+    padding:5px;
+}
+
+
+.add-btn{
+    position:absolute;
+    right:10px;
+    bottom:90px;
+    border:1px solid #ff4d6d;
+    background:#fff;
+    color:#ff4d6d;
+    padding:5px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.price{
+    margin-top:8px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.price .new{
+    background:#1a9c3c;   /* green background */
+    color:#fff;           /* white text */
+    padding:4px 8px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+
+.price .old{
+    text-decoration:line-through;
+    color:#4d4b4b;
+    font-size:13px;
+}
+
+.product-name{
+    font-size:14px;
+    margin-top:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER (reuse your existing header here) -->
+<header>
+
+    <!-- TOP HEADER -->
+    <div class="top-header">
+        <a href="../index.html" class="logo">zepto</a>
+
+       <!-- LOCATION MODAL -->
+        <div class="location" onclick="openModal()">📍 Select Location</div>
+<div class="modal" id="locationModal">
+    <div class="modal-box">
+        <div class="close-btn" onclick="closeModal()">✖</div>
+        <h3>Select your location</h3>
+
+        <input type="text" placeholder="Search area, city..." id="locationInput">
+
+        <div class="use-live" onclick="getLiveLocation()">📍 Use Live Location</div>
+    </div>
+</div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search for &quot;chocolate box&quot;">
+            <span>🔍</span>
+        </div>
+
+        <div class="right-icons">
+            <a href="javascript:void(0)" onclick="openLoginModal()">
+            <span>👤</span>
+             Login
+            </a>
+
+            <a href="cart.html">
+                <span>🛒</span>
+                Cart
+            </a>
+        </div>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="nav-bar">
+        <a href="../index.html" class="nav-item active"><span>👜</span>All</a>
+<a href="cafe.html" class="nav-item"><span>☕</span>Cafe</a>
+<a href="home.html" class="nav-item"><span>🏠</span>Home</a>
+<a href="toys.html" class="nav-item"><span>🧸</span>Toys</a>
+<a href="fresh.html" class="nav-item"><span>🥦</span>Fresh</a>
+
+<a href="meat.html" class="nav-item"><span>🍗</span>Meat</a>
+<a href="icecream.html" class="nav-item"><span>🍨</span>Ice Cream</a>
+<a href="packaged_food.html" class="nav-item"><span>📦</span>Packaged Food</a>
+<a href="dairy.html" class="nav-item"><span>🥛</span>Dairy</a>
+
+<a href="electronics.html" class="nav-item"><span>🎧</span>Electronics</a>
+<a href="chocolate.html" class="nav-item"><span>🍫</span>Chocolates</a>
+<a href="beauty.html" class="nav-item"><span>💄</span>Beauty</a>
+<a href="fashion.html" class="nav-item"><span>👕</span>Fashion</a>
+    </nav>
+
+</header>
+
+<div class="page">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <h3>Cafe Items</h3>
+
+    <div class="side-item active">
+        <img src="../images/cafe2.jpg">
+        All
+    </div>
+
+    <div class="side-item">
+        <img src="../images/coffee.jpg">
+        Coffee
+    </div>
+
+    <div class="side-item">
+        <img src="../images/breakfast.jpg">
+        Breakfast
+    </div>
+
+    <div class="side-item">
+        <img src="../images/pastries.jpg">
+       Pastries
+    </div>
+</aside>
+
+<!-- MAIN -->
+<section class="main-content">
+
+    
+    <div class="banner-row">
+        <img src="../images/cafe-banner1.jpg">
+        <img src="../images/cafe-banner2.jpg">
+        <img src="../images/cafe-banner3.jpg">
+    </div>
+    
+
+    <!-- ROW 1 -->
+   <h2 class="section-title">Coffee & Beverages</h2>
+    <div class="products">
+        <div class="product-card">
+            <img src="../images/latte.jpg">
+            <button class="add-btn" onclick="addToCart('Latte',150)">ADD</button>
+            <div class="price"><span class="new">₹150</span><span class="old">₹200</span></div>
+            <p class="product-name">Latte</p>
+        </div>
+
+        <div class="product-card">
+            <img src="../images/coffee.jpg">
+            <button class="add-btn" onclick="addToCart('Cappuccino',140)">ADD</button>
+            <div class="price"><span class="new">₹140</span><span class="old">₹190</span></div>
+            <p class="product-name">Cappuccino</p>
+        </div>
+
+        <div class="product-card">
+            <img src="../images/americano.jpg">
+            <button class="add-btn" onclick="addToCart('Americano',120)">ADD</button>
+            <div class="price"><span class="new">₹120</span><span class="old">₹170</span></div>
+            <p class="product-name">Americano</p>
+        </div>
+    </div>
+
+    <h2 class="section-title">Pastries & Snacks</h2>
+    <div class="products">
+        <div class="product-card">
+            <img src="../images/croissant.jpg">
+            <button class="add-btn" onclick="addToCart('Croissant',60)">ADD</button>
+            <div class="price"><span class="new">₹60</span><span class="old">₹90</span></div>
+            <p class="product-name">Croissant</p>
+        </div>
+
+        <div class="product-card">
+            <img src="../images/muffin.jpg">
+            <button class="add-btn" onclick="addToCart('Muffin',50)">ADD</button>
+            <div class="price"><span class="new">₹50</span><span class="old">₹75</span></div>
+            <p class="product-name">Muffin</p>
+        </div>
+
+        <div class="product-card">
+            <img src="../images/sandwich.jpg">
+            <button class="add-btn" onclick="addToCart('Sandwich',80)">ADD</button>
+            <div class="price"><span class="new">₹80</span><span class="old">₹110</span></div>
+            <p class="product-name">Sandwich</p>
+        </div>
+    </div>
+
+</section>
+</div>
+<!-- PROMOTIONAL INFO SECTION -->
+<section class="promo-info" style="padding:50px 40px; background:#fff; border-radius:18px; margin:30px 40px;">
+    <h2 style="font-size:26px; margin-bottom:20px;">Discover Our Cafe Specials</h2>
+    <p style="font-size:16px; color:#555; line-height:1.8;">
+        Enjoy freshly brewed coffee, artisanal pastries, and delicious breakfast combos delivered to your doorstep. 
+        Our cafe menu is crafted with love to give you the perfect start to your day. 
+        From creamy lattes to freshly baked croissants, every sip and bite promises quality and freshness.
+        Order now and bring the cozy cafe experience to your home!
+    </p>
+</section>
+
+<!-- PRICE LIST SECTION -->
+<section class="price-list" style="padding:50px 40px; background:#f4f4f8; border-radius:18px; margin:30px 40px;">
+    <h2 style="font-size:26px; margin-bottom:0px;">Cafe Menu & Prices</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px;">
+
+        <!-- Coffee & Beverages -->
+        <div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin-bottom:10px; color:#6a00ff;">Coffee & Beverages</h3>
+            <ul style="list-style:none; padding-left:0; color:#444;">
+                <li>Espresso - ₹120</li>
+                <li>Latte - ₹150</li>
+                <li>Cappuccino - ₹140</li>
+                <li>Mocha - ₹160</li>
+                <li>Cold Coffee - ₹130</li>
+            </ul>
+        </div>
+
+        <!-- Pastries & Snacks -->
+        <div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin-bottom:10px; color:#6a00ff;">Pastries & Snacks</h3>
+            <ul style="list-style:none; padding-left:0; color:#444;">
+                <li>Croissant - ₹80</li>
+                <li>Muffin - ₹60</li>
+                <li>Chocolate Cake Slice - ₹120</li>
+                <li>Sandwich - ₹90</li>
+                <li>Brownie - ₹70</li>
+            </ul>
+        </div>
+
+        <!-- Breakfast Combos -->
+        <div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin-bottom:10px; color:#6a00ff;">Breakfast Combos</h3>
+            <ul style="list-style:none; padding-left:0; color:#444;">
+                <li>Egg Sandwich + Coffee - ₹150</li>
+                <li>Pancakes + Latte - ₹180</li>
+                <li>Toast + Cappuccino - ₹130</li>
+                <li>Bagel + Cold Coffee - ₹170</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+
+<section class="how-it-works">
+    <h2>How it Works</h2>
+
+    <div class="how-cards">
+
+        <div class="how-card">
+            <img src="../images/open-app.jpg">
+            <h3>Open the app</h3>
+            <p>Choose from over 7000 products across groceries, fruits, veggies, meat, beauty & more</p>
+        </div>
+
+        <div class="how-card">
+            <img src="../images/place-order.jpg">
+            <h3>Place an order</h3>
+            <p>Add your favourite items to the cart & avail the best offers</p>
+        </div>
+
+        <div class="how-card">
+            <img src="../images/free-delivery.jpg">
+            <h3>Get free delivery</h3>
+            <p>Experience lightning-fast delivery in just 10 minutes</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer reused as in your original page -->
+<footer class="zepto-footer">
+    <div class="footer-top">
+        <p><strong>Popular Searches</strong></p>
+        <p>Products: Coffee, Croissant, Muffin, Sandwich</p>
+        <p>Brands: Starbucks, Cafe Coffee Day, Barista</p>
+        <p>Categories: Cafe, Beverages, Snacks</p>
+    </div>
+    <div class="footer-categories">
+        <strong>Categories</strong>
+        <p>Cafe | Beverages | Snacks | Fresh | Grocery</p>
+    </div>
+    <hr>
+
+    <!-- MAIN FOOTER -->
+    <div class="footer-main">
+
+        <div>
+            <h3 class="footer-logo">zepto</h3>
+            <p>India’s fastest delivery app</p>
+        </div>
+
+        <div>
+            <strong>Marketplace</strong>
+            <p>Groceries</p>
+            <p>Fresh</p>
+            <p>Fashion</p>
+        </div>
+
+        <div>
+            <strong>Download App</strong><br>
+             <a href="https://play.google.com/store/search?q=zepto&c=apps" target="_blank"> 
+            <img src="../images/playstore.jpg" width="30"></a><br>
+
+            <a href="https://apps.apple.com/in/search?term=zepto" target="_blank">
+            <img src="../images/appstore.jpg" width="30"></a>
+        </div>
+
+        <div>
+            <strong>Company</strong>
+            <p>Home</p>
+            <p>Experiences</p>
+            <p>Services</p>
+            <p>Delivery</p>
+        </div>
+
+        <div>
+            <strong>Follow Us</strong><br>
+            <img src="../images/instagram.jpg" width="24">&nbsp;
+            <img src="../images/facebook.jpg" width="24">&nbsp;
+            <img src="../images/twitter.jpg" width="24">
+        </div>
+
+    </div>
+
+</footer>
+
+<script>
+
+
+function openModal(){
+    document.getElementById("locationModal").style.display = "flex";
+}
+
+function closeModal(){
+    document.getElementById("locationModal").style.display = "none";
+}
+
+function getLiveLocation(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(pos=>{
+            const lat = pos.coords.latitude.toFixed(2);
+            const lon = pos.coords.longitude.toFixed(2);
+            document.querySelector(".location").innerText = `📍 Location Selected`;
+            closeModal();
+        }, ()=>{
+            alert("Location access denied");
+        });
+    }else{
+        alert("Geolocation not supported");
+    }
+}
+
+
+function addToCart(name, price){
+    // Optional: store in localStorage if needed
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({name, price, qty:1});
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Show message instead of redirect
+    alert(`${name} added to cart!`);
+}
+</script>
+
+</body>
+</html>

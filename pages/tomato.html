@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Tomato Local | Zepto Clone</title>
+<link rel="icon" href="../images/favicon.jpg">
+<link rel="stylesheet" href="../common.css">
+<style>
+*{
+    margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, sans-serif;
+}
+body{ background:#f6f4f8; color:#222; }
+
+header{
+    border-bottom:1px solid #e5e5e5; position:sticky; top:0; background:#fff; z-index:999;
+    display:flex; align-items:center; justify-content:space-between; padding:12px 40px;
+}
+header .logo{ font-size:28px; color:#6a00ff; font-weight:bold; text-decoration:none; }
+header input{ padding:8px 12px; border-radius:10px; border:1px solid #ddd; width:300px; }
+header a{ text-decoration:none; color:#444; margin-left:20px; font-size:14px; }
+
+/* BACK BUTTON */
+.back-btn{
+    display:inline-block;
+    margin-bottom:0px;
+    color:#6a00ff;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+/* PRODUCT PAGE LAYOUT */
+.product-page{
+    display:flex; gap:40px; padding:40px;
+}
+.product-images{
+    display:flex; flex-direction:row; gap:15px;
+}
+.thumbnails{
+    display:flex; flex-direction:column; gap:10px;
+}
+.thumbnails img{
+    width:60px; height:60px; object-fit:cover; border-radius:8px; cursor:pointer;
+    border:1px solid #ddd;
+    transition: transform 0.3s;
+}
+.thumbnails img:hover{ transform: scale(1.05); border-color:#6a00ff; }
+.main-image img{ width:400px; height:400px; object-fit:cover; border-radius:18px; }
+
+/* PRODUCT INFO */
+.product-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+.product-info h1{ font-size:26px; }
+.price-section{ display:flex; align-items:center; gap:15px; }
+.price-section .new{ font-size:22px; color:#1a9c3c; font-weight:600; }
+.price-section .old{ text-decoration:line-through; color:#888; font-size:16px; }
+
+.coupons, .highlights{
+    background:#fff; padding:20px; border-radius:16px; box-shadow:0 3px 10px rgba(0,0,0,0.05);
+}
+.coupons p, .highlights p{ margin:8px 0; }
+
+.add-cart-btn{
+    padding:14px 20px; background:#6a00ff; color:#fff; border:none; border-radius:12px;
+    cursor:pointer; font-size:16px; font-weight:600;
+}
+.add-cart-btn:hover{ background:#5200cc; }
+
+.side-scroll{
+    display:flex; overflow-x:auto; gap:10px; scroll-behavior:smooth; padding-top:10px;
+}
+.side-scroll img{
+    width:80px; height:80px; object-fit:cover; border-radius:10px; cursor:pointer;
+}
+.side-scroll::-webkit-scrollbar{ display:none; }
+
+
+/* ===== HOW IT WORKS ===== */
+.how-it-works{
+    padding:0px 40px;
+    text-align:center;
+}
+
+.how-it-works h2{
+    margin-bottom:30px;
+    font-size:26px;
+}
+
+.how-cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+}
+
+.how-card{
+    background:#fff;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+.how-card img{
+    width:80px;
+    margin-bottom:15px;
+    border-radius:5px ;
+}
+
+.how-card h3{
+    margin-bottom:10px;
+}
+
+.how-card p{
+    font-size:14px;
+    color:#666;
+}
+/* ===== FOOTER ===== */
+.zepto-footer{
+    background:#f8f8f8;
+    padding:40px;
+    font-size:14px;
+    color:#555;
+}
+
+.footer-top p,
+.footer-categories p{
+    margin:6px 0;
+}
+
+.footer-categories{
+    margin:20px 0;
+}
+
+.zepto-footer hr{
+    margin:25px 0;
+    border:none;
+    border-top:1px solid #ddd;
+}
+
+.footer-main{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:20px;
+}
+
+.footer-logo{
+    color:#6a00ff;
+    font-size:24px;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">zepto</a>
+    <input type="text" placeholder="Search for 'tomato'">
+    <div>
+        <a href="cart.html">Cart</a>
+    </div>
+</header>
+
+<div style="padding:40px; max-width:1200px; margin:auto;">
+    <a href="fresh.html" class="back-btn">&#8592; Back to Fresh</a>
+
+    <div class="product-page">
+
+        <div class="product-images">
+            <div class="thumbnails">
+                <img src="../images/tomato1.jpg" onclick="changeMainImage(this)">
+                <img src="../images/tomato2.jpg" onclick="changeMainImage(this)">
+                <img src="../images/tomato3.jpg" onclick="changeMainImage(this)">
+                <img src="../images/tomato4.jpg" onclick="changeMainImage(this)">
+            </div>
+            <div class="main-image">
+                <img src="../images/tomato1.jpg" id="mainProductImage">
+            </div>
+        </div>
+
+        <div class="product-info">
+            <h1>Tomato Local</h1>
+            <p>Net Qty: 500 g</p>
+            <div class="price-section">
+                <span class="new">₹32</span>
+                <span class="old">₹59</span>
+                <span style="color:#1a9c3c; font-weight:600;">₹27 OFF</span>
+            </div>
+
+            <div class="coupons">
+                <h3>Coupons & Offers</h3>
+                <p>Get 5% off with OneCard</p>
+                <p>Earn 15% Off Your First Flight</p>
+                <p>Earn up to 40% Off Your First Hotel booking with MMT</p>
+            </div>
+
+            <div class="highlights">
+                <h3>Product Highlights</h3>
+                <p>Fresh, locally sourced tomatoes, rich in vitamins, perfect for salads and cooking.</p>
+                <div class="side-scroll">
+                    <img src="../images/tomato1.jpg">
+                    <img src="../images/tomato2.jpg">
+                    <img src="../images/tomato3.jpg">
+                    <img src="../images/tomato4.jpg">
+                </div>
+            </div>
+
+            <button class="add-cart-btn" onclick="addToCart('Tomato',32)">Add to Cart</button>
+        </div>
+
+    </div>
+</div>
+
+
+<section class="promo-info" style="padding:50px 40px; background:#fff; border-radius:18px; margin:30px 40px;">
+    <h2 style="font-size:26px; margin-bottom:20px;">Buy Fresh Fruits & Vegetables</h2>
+    <p style="font-size:16px; color:#555; line-height:1.8;">
+        Get the freshest fruits and vegetables delivered right to your doorstep. We ensure top quality, 
+        farm-fresh produce, handpicked for you. Enjoy seasonal vegetables, exotic fruits, organic options, 
+        and more. All products are carefully sourced to provide maximum freshness and taste. 
+        Perfect for a healthy lifestyle and delicious meals every day!
+    </p>
+</section>
+
+<!-- PRICE LIST SECTION -->
+<section class="price-list" style="padding:50px 40px; background:#f4f4f8; border-radius:18px; margin:30px 40px;">
+    <h2 style="font-size:26px; margin-bottom:0px;">Price List</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px;">
+
+        <!-- Vegetables -->
+        <div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin-bottom:10px; color:#6a00ff;">Vegetables</h3>
+            <ul style="list-style:none; padding-left:0; color:#444;">
+                <li>Tomato (1kg) - ₹32</li>
+                <li>Potato (1kg) - ₹25</li>
+                <li>Onion (1kg) - ₹28</li>
+                <li>Coriander - ₹9</li>
+                <li>Capsicum - ₹51</li>
+            </ul>
+        </div>
+
+        <!-- Fruits -->
+        <div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin-bottom:0px; color:#6a00ff;">Fruits</h3>
+            <ul style="list-style:none; padding-left:0; color:#444;">
+                <li>Apple - ₹120</li>
+                <li>Banana - ₹25</li>
+                <li>Green Grapes - ₹65</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+<section class="how-it-works">
+    <h2>How it Works</h2>
+
+    <div class="how-cards">
+
+        <div class="how-card">
+            <img src="../images/open-app.jpg">
+            <h3>Open the app</h3>
+            <p>Choose from over 7000 products across groceries, fruits, veggies, meat, beauty & more</p>
+        </div>
+
+        <div class="how-card">
+            <img src="../images/place-order.jpg">
+            <h3>Place an order</h3>
+            <p>Add your favourite items to the cart & avail the best offers</p>
+        </div>
+
+        <div class="how-card">
+            <img src="../images/free-delivery.jpg">
+            <h3>Get free delivery</h3>
+            <p>Experience lightning-fast delivery in just 10 minutes</p>
+        </div>
+
+    </div>
+</section>
+<!-- FOOTER (reuse same footer) -->
+<footer class="zepto-footer">
+
+    <!-- POPULAR SEARCHES -->
+    <div class="footer-top">
+        <p><strong>Popular Searches</strong></p>
+        <p>Products: Milk, Bread, Chocolate, Ice Cream</p>
+        <p>Brands: Amul, Cadbury, Nestle, Haldiram</p>
+        <p>Categories: Fruits, Vegetables, Dairy, Snacks</p>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="footer-categories">
+        <strong>Categories</strong>
+        <p>Fresh Fruits | Vegetables | Dairy | Healthcare | Fashion | Electronics | Toys</p>
+    </div>
+
+    <hr>
+
+    <!-- MAIN FOOTER -->
+    <div class="footer-main">
+
+        <div>
+            <h3 class="footer-logo">zepto</h3>
+            <p>India’s fastest delivery app</p>
+        </div>
+
+        <div>
+            <strong>Marketplace</strong>
+            <p>Groceries</p>
+            <p>Fresh</p>
+            <p>Fashion</p>
+        </div>
+
+        <div>
+            <strong>Download App</strong><br>
+             <a href="https://play.google.com/store/search?q=zepto&c=apps" target="_blank"> 
+            <img src="../images/playstore.jpg" width="30"></a><br>
+
+            <a href="https://apps.apple.com/in/search?term=zepto" target="_blank">
+            <img src="../images/appstore.jpg" width="30"></a>
+        </div>
+
+        <div>
+            <strong>Company</strong>
+            <p>Home</p>
+            <p>Experiences</p>
+            <p>Services</p>
+            <p>Delivery</p>
+        </div>
+
+        <div>
+            <strong>Follow Us</strong><br>
+            <img src="../images/instagram.jpg" width="24">&nbsp;
+            <img src="../images/facebook.jpg" width="24">&nbsp;
+            <img src="../images/twitter.jpg" width="24">
+        </div>
+
+    </div>
+
+</footer>
+
+<script>
+function changeMainImage(img){
+    document.getElementById("mainProductImage").src = img.src;
+}
+
+function addToCart(name, price){
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({name, price, qty:1});
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`${name} added to cart!`);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Account | Zepto Clone</title>
+<link rel="icon" href="../images/favicon.jpg">
+<link rel="stylesheet" href="../common.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, sans-serif;
+}
+
+body{
+    background:#f6f4f8;
+}
+
+/* ===== TOP BAR ===== */
+.topbar{
+    background:#fff;
+    padding:14px 20px;
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid #e5e5e5;
+}
+/* ===== LAYOUT ===== */
+.page{
+    display:flex;
+    padding:20px 40px;
+    gap:25px;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+    width:260px;
+    background:#fff;
+    border-radius:12px;
+    padding:18px;
+}
+
+.profile-box{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:#8e44ad;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:22px;
+}
+
+.profile-box h3{
+    font-size:16px;
+}
+
+.profile-box p{
+    font-size:13px;
+    color:#777;
+}
+
+.menu{
+    margin-top:10px;
+}
+
+.menu-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    cursor:pointer;
+    border-radius:8px;
+    font-size:15px;
+}
+
+.menu-item:hover{
+    background:#f1eef7;
+}
+
+.menu-item.active{
+    background:#e9e3f5;
+    font-weight:600;
+}
+
+.logout{
+    margin-top:15px;
+    padding:12px 0;
+    color:#d60000;
+    border:1px solid #d60000;
+    border-radius:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:600;
+    cursor:pointer;
+}
+.logout:hover{
+    background:#ffecec;
+}
+
+/* ===== MAIN CONTENT ===== */
+.content{
+    flex:1;
+    background:#fff;
+    border-radius:12px;
+    padding:20px;
+}
+
+.content-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-bottom:1px solid #e5e5e5;
+    padding-bottom:15px;
+}
+
+.content-header span{
+    font-size:22px;
+    cursor:pointer;
+}
+
+.empty-state{
+    height:300px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    color:#777;
+}
+
+.empty-state button{
+    margin-top:15px;
+    padding:10px 22px;
+    border:1px solid #6f2dbd;
+    background:#fff;
+    color:#6f2dbd;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+    <header>
+
+    <!-- TOP HEADER -->
+    <div class="top-header">
+        <a href="index.html" class="logo">zepto</a>
+
+       <!-- LOCATION MODAL -->
+      <div class="location" id="locationText" onclick="openModal()">📍 Select Location</div>
+
+<div class="modal" id="locationModal">
+    <div class="modal-box">
+        <div class="close-btn" onclick="closeModal()">✖</div>
+        <h3>Select your location</h3>
+
+        <input type="text" placeholder="Search area, city..." id="locationInput">
+
+        <div class="use-live" onclick="getLiveLocation()">📍 Use Live Location</div>
+    </div>
+</div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search for &quot;chocolate box&quot;">
+            <span>🔍</span>
+        </div>
+
+        <div class="right-icons">
+        
+            <a href="cart.html">
+                <span>🛒</span>
+                Cart
+            </a>
+
+            <a href="profile.html">
+                <span>⚙️</span>
+                Profile
+            </a>
+           
+        </div>
+    </div>
+
+<!-- ===== PAGE ===== -->
+<div class="page">
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+
+        <div class="profile-box">
+            <div class="avatar">👤</div>
+            <div>
+                <h3>Bhumika Gavhane</h3>
+                <p>1234567890</p>
+            </div>
+        </div>
+
+        <div class="menu">
+            <div class="menu-item active">🛍 Orders</div>
+            <div class="menu-item">🎧 Customer Support</div>
+            <div class="menu-item">💜 Manage Referrals</div>
+
+            <!-- Added options -->
+            <div class="menu-item">📍 Address</div>
+            <div class="menu-item">👤 Profile</div>
+             <div class="logout" onclick="window.location.href='../index.html'">
+    Logout
+</div>
+
+        </div>
+
+    </div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <div class="content-header">
+            <span onclick="goHome()"> <b><</b></span>
+            <h3>Settings</h3>
+        </div>
+
+        <div class="empty-state">
+            <h3>No orders yet</h3>
+            <button onclick="goHome()">Browse products</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function goHome(){
+    window.location.href = "index.html";
+}
+/* ===== LOCATION MODAL ===== */
+function openModal(){
+    document.getElementById("locationModal").style.display = "flex";
+}
+
+function closeModal(){
+    document.getElementById("locationModal").style.display = "none";
+}
+
+/* ===== LIVE LOCATION (NO LAT/LNG) ===== */
+function getLiveLocation(){
+
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+            function(position){
+                // SUCCESS
+                document.getElementById("locationText").innerText = "📍 Location detected";
+                closeModal();
+            },
+            function(error){
+                alert("Location access denied");
+            }
+        );
+    } else {
+        alert("Geolocation not supported");
+    }
+}
+</script>
+
+</body>
+</html>

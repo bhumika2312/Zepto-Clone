@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Simple Quiz</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        h2 { text-align: center; }
+        .question { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        button { padding: 10px 15px; margin-top: 10px; cursor: pointer; }
+        .result { margin-top: 20px; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>Simple Quiz</h2>
+
+    <div class="question">
+        <p>1. What is 2 + 2?</p>
+        <label><input type="radio" name="q1" value="3"> 3</label>
+        <label><input type="radio" name="q1" value="4"> 4</label>
+        <label><input type="radio" name="q1" value="5"> 5</label>
+    </div>
+
+    <div class="question">
+        <p>2. Capital of France?</p>
+        <label><input type="radio" name="q2" value="London"> London</label>
+        <label><input type="radio" name="q2" value="Paris"> Paris</label>
+        <label><input type="radio" name="q2" value="Rome"> Rome</label>
+    </div>
+
+    <div class="question">
+        <p>3. Language of this quiz?</p>
+        <label><input type="radio" name="q3" value="Python"> Python</label>
+        <label><input type="radio" name="q3" value="JavaScript"> JavaScript</label>
+        <label><input type="radio" name="q3" value="HTML"> HTML</label>
+    </div>
+
+    <button onclick="submitQuiz()">Submit</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        // Load saved answers on page load
+        window.onload = function() {
+            const saved = JSON.parse(localStorage.getItem("answers")) || {};
+            for (let q in saved) {
+                const el = document.querySelector(`input[name="${q}"][value="${saved[q]}"]`);
+                if (el) el.checked = true;
+            }
+            if (Object.keys(saved).length > 0) showResult();
+            console.log("Saved answers on load:", saved); // visible in console
+        }
+
+        function submitQuiz() {
+            const answers = {};
+            for (let i = 1; i <= 3; i++) {
+                const checked = document.querySelector(`input[name="q${i}"]:checked`);
+                if (checked) answers['q'+i] = checked.value;
+            }
+
+            // Save answers to localStorage
+            localStorage.setItem("answers", JSON.stringify(answers));
+            console.log("Answers saved:", answers); // visible in console
+
+            showResult();
+        }
+
+        function showResult() {
+            const correct = {q1:"4", q2:"Paris", q3:"JavaScript"};
+            const saved = JSON.parse(localStorage.getItem("answers")) || {};
+            let score = 0;
+            for (let q in correct) {
+                if (saved[q] === correct[q]) score++;
+            }
+            document.getElementById("result").innerText = `You scored ${score} out of 3`;
+        }
+    </script>
+</body>
+</html>

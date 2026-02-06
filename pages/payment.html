@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Payment | Zepto Clone</title>
+<link rel="icon" href="../images/favicon.jpg">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;}
+body{background:#f6f6f6;color:#222}
+
+/* HEADER */
+header{
+    background:#fff;
+    padding:14px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #eee;
+    position:sticky;
+    top:0;
+}
+.logo{font-size:26px;font-weight:800;color:#6a00ff;text-decoration:none}
+header a{text-decoration:none;color:#444;font-weight:600}
+
+/* LAYOUT */
+.page{
+    max-width:1200px;
+    margin:30px auto;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:25px;
+    padding:0 30px;
+}
+
+/* CARD */
+.card{
+    background:#fff;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+.card h3{margin-bottom:15px;color:#6a00ff}
+
+/* ADDRESS */
+textarea{
+    width:100%;
+    height:90px;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    background:#faf7ff;
+}
+.location-btn{
+    margin-top:10px;
+    padding:10px 14px;
+    border:none;
+    border-radius:10px;
+    background:#efe9ff;
+    color:#6a00ff;
+    font-weight:600;
+    cursor:pointer;
+}
+
+/* PAYMENT OPTIONS */
+.pay-option{
+    display:flex;
+    gap:12px;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    margin-bottom:12px;
+    cursor:pointer;
+}
+.pay-option:hover{border-color:#6a00ff;background:#f4efff}
+input[type=radio]{accent-color:#6a00ff}
+
+/* CARD FORM */
+.card-form{
+    display:none;
+    margin-top:15px;
+    background:#faf7ff;
+    padding:15px;
+    border-radius:12px;
+}
+.card-form input{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+.card-pay{
+    width:100%;
+    padding:12px;
+    background:#6a00ff;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* BILL */
+.bill-row{display:flex;justify-content:space-between;margin:10px 0;font-size:14px}
+.bill-row.total{font-size:18px;font-weight:800}
+.savings{
+    background:#e8fff1;
+    color:#1b8f4b;
+    padding:10px;
+    border-radius:12px;
+    margin:12px 0;
+    font-weight:600;
+}
+.confirm-btn{
+    width:100%;
+    padding:16px;
+    background:#ff2e2e;
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* UPI */
+.upi-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.upi-box{
+    background:#fff;
+    padding:25px;
+    border-radius:18px;
+    width:320px;
+    text-align:center;
+}
+.upi-box img{width:200px;margin:15px 0}
+.upi-confirm{width:100%;padding:12px;background:#27ae60;color:#fff;border:none;border-radius:12px}
+.upi-cancel{width:100%;padding:10px;border:none;border-radius:12px;background:#eee;margin-top:10px}
+
+.sticky{position:sticky;top:100px}
+
+@media(max-width:900px){.page{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="../index.html" class="logo">zepto</a>
+    <a href="cart.html">Back to Cart</a>
+</header>
+
+<div class="page">
+
+<!-- LEFT -->
+<div>
+
+<div class="card">
+<h3>Delivery Address</h3>
+<textarea id="address" placeholder="House no, Building, Area, City"></textarea>
+<button class="location-btn" onclick="useLocation()">📍 Use Live Location</button>
+</div>
+
+<div class="card">
+<h3>Payment Method</h3>
+
+<label class="pay-option">
+<input type="radio" name="pay" value="UPI" checked onchange="togglePayment()"> UPI / QR ⚡
+</label>
+
+<label class="pay-option">
+<input type="radio" name="pay" value="Card" onchange="togglePayment()"> Credit / Debit Card 💳
+</label>
+
+<label class="pay-option">
+<input type="radio" name="pay" value="COD" onchange="togglePayment()"> Cash on Delivery 💵
+</label>
+
+<!-- CARD FORM -->
+<div class="card-form" id="cardForm">
+<input type="text" id="cardNo" placeholder="Card Number">
+<input type="text" id="exp" placeholder="MM/YY">
+<input type="password" id="cvv" placeholder="CVV">
+<button class="card-pay" onclick="payByCard()">Pay Now</button>
+</div>
+
+</div>
+</div>
+
+<!-- RIGHT -->
+<div class="sticky">
+<div class="card">
+<h3>Bill Summary</h3>
+
+<div class="bill-row"><span>Items</span><span id="items">0</span></div>
+<div class="bill-row"><span>Item Total</span><span>₹<span id="subtotal">0</span></span></div>
+<div class="bill-row"><span>Discount</span><span style="color:green">-₹<span id="discount">0</span></span></div>
+<div class="bill-row"><span>Delivery Fee</span><span>₹30</span></div>
+
+<div class="savings">🎉 You saved ₹<span id="saved">0</span></div>
+
+<hr>
+<div class="bill-row total"><span>Grand Total</span><span>₹<span id="total">0</span></span></div>
+
+<button class="confirm-btn" onclick="confirmOrder()">Place Order</button>
+</div>
+</div>
+
+</div>
+
+<!-- UPI -->
+<div class="upi-overlay" id="upi">
+<div class="upi-box">
+<h3>Scan & Pay</h3>
+<img src="../images/qr.jpg">
+<button class="upi-confirm" onclick="completeUPI()">I've Paid</button>
+<button class="upi-cancel" onclick="upi.style.display='none'">Cancel</button>
+</div>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let grandTotal=0;
+
+function loadBill(){
+let items=0,subtotal=0;
+cart.forEach(p=>{items+=p.qty;subtotal+=p.qty*p.price});
+let discount=Math.round(subtotal*0.12);
+grandTotal=subtotal-discount+30;
+itemsEl.innerText=items;
+subtotalEl.innerText=subtotal;
+discountEl.innerText=discount;
+saved.innerText=discount;
+totalEl.innerText=grandTotal;
+}
+
+const itemsEl=document.getElementById("items");
+const subtotalEl=document.getElementById("subtotal");
+const discountEl=document.getElementById("discount");
+const totalEl=document.getElementById("total");
+const saved=document.getElementById("saved");
+
+function togglePayment(){
+cardForm.style.display =
+document.querySelector("input[name='pay']:checked").value==="Card"
+? "block" : "none";
+}
+
+function confirmOrder(){
+if(!address.value.trim()){alert("Enter delivery address");return;}
+let method=document.querySelector("input[name='pay']:checked").value;
+
+if(method==="UPI") upi.style.display="flex";
+else if(method==="COD"){
+alert(`💵 Pay ₹${grandTotal} in cash at delivery`);
+finish("COD");
+}
+}
+
+function payByCard(){
+if(!cardNo.value || !exp.value || !cvv.value){
+alert("Enter card details");return;
+}
+cardForm.style.display="none";
+finish("Card");
+}
+
+function completeUPI(){finish("UPI")}
+
+function finish(method){
+alert(`✅ Order Placed\nPayment: ${method}`);
+localStorage.removeItem("cart");
+window.location.href="../index.html";
+}
+
+function useLocation(){
+navigator.geolocation.getCurrentPosition(p=>{
+address.value=`Lat ${p.coords.latitude.toFixed(3)}, Lng ${p.coords.longitude.toFixed(3)}`
+});
+}
+
+loadBill();
+</script>
+
+</body>
+</html>

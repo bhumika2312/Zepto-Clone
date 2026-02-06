@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>My Cart | Zepto Clone</title>
+<link rel="icon" href="../images/favicon.jpg">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, sans-serif;
+}
+
+body{
+    background:#f6f6f6;
+}
+
+/* HEADER */
+header{
+    background:#fff;
+    padding:10px 30px;
+    border-bottom:1px solid #ececec;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.logo{
+    font-size:26px;
+    font-weight:800;
+    color:#6a00ff;
+    text-decoration:none;
+}
+
+.header-right a{
+    font-size:14px;
+    font-weight:600;
+    color:#6a00ff;
+    text-decoration:none;
+}
+
+/* MAIN */
+.container{
+    max-width:1200px;
+    margin:20px auto;
+    padding:0 20px;
+}
+
+.cart-grid{
+    display:grid;
+    grid-template-columns: 2fr 1fr;
+    gap:24px;
+}
+
+/* LEFT */
+.left{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+/* CART ITEMS */
+.products{
+    background:#fff;
+     height: 600px;
+    border-radius:14px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.08);
+    max-height:420px;
+    overflow-y:auto;
+}
+
+.product{
+    display:flex;
+   
+    gap:14px;
+    padding:14px;
+    border-bottom:1px solid #eee;
+}
+
+.product img{
+    width:70px;
+    height:70px;
+    object-fit:contain;
+    background:#fafafa;
+    border-radius:10px;
+}
+
+.product-info h4{
+    font-size:15px;
+    margin-bottom:4px;
+}
+
+.product-info p{
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.qty{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.qty button{
+    width:26px;
+    height:26px;
+    border:none;
+    color:#fff;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.minus{ background:#ff3b3b; }
+.plus{ background:#27ae60; }
+
+/* BILL SUMMARY */
+.box{
+    background:#fff;
+    padding:18px;
+    border-radius:14px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+
+.box h3{
+    margin-bottom:12px;
+}
+
+.box p{
+    margin:8px 0;
+    font-size:14px;
+}
+
+/* PAY BUTTON */
+.pay-btn button{
+    width:100%;
+    padding:14px;
+    background:#ff2e2e;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.pay-btn button:hover{
+    background:#e60000;
+}
+
+/* RIGHT */
+.right{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.ad img{
+    width:100%;
+    border-radius:14px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+
+.policy{
+    background:#f2f2f2;
+    padding:16px;
+    border-radius:14px;
+}
+
+.empty{
+    padding:40px;
+    text-align:center;
+    color:#777;
+}
+
+@media(max-width:900px){
+    .cart-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="../index.html" class="logo">zepto</a>
+    <div class="header-right">
+        <a href="order-tracking.html">📦 Track Progress</a>
+    </div>
+</header>
+
+<div class="container">
+<h2>Your Cart</h2>
+
+<div class="cart-grid">
+
+    <!-- LEFT -->
+    <div class="left">
+
+        <!-- CART ITEMS -->
+        <div class="products" id="cartItems"></div>
+
+        <!-- BILL SUMMARY -->
+        <div class="box">
+            <h3>Bill Summary</h3>
+            <p>Items: <span id="items">0</span></p>
+            <p>Subtotal: ₹<span id="subtotal">0</span></p>
+            <p>Discount: -₹<span id="discount">0</span></p>
+            <p>Delivery Charges: ₹30</p>
+            <hr>
+            <p><strong>Total Payable: ₹<span id="total">0</span></strong></p>
+
+            <div class="pay-btn">
+                <button onclick="location.href='payment.html'">
+                    Proceed to Pay →
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+        <div class="ad">
+            <img src="../images/cart-ad.jpg">
+        </div>
+
+        <div class="policy">
+            <h3>Delivery Rules</h3>
+            <p>🚚 Delivery within 20–30 minutes</p>
+            <p>📍 Ensure correct address</p>
+            <p>📞 Phone must be reachable</p>
+        </div>
+
+        <div class="policy">
+            <h3>Exchange Policy</h3>
+            <p>🔁 Instant exchange for damaged items</p>
+            <p>🕒 Report within 24 hours</p>
+            <p>❌ Perishables non-returnable</p>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function renderCart(){
+    const box = document.getElementById("cartItems");
+    box.innerHTML = "";
+
+    let items = 0, subtotal = 0;
+
+    if(cart.length === 0){
+        box.innerHTML = "<div class='empty'>🛒 Your cart is empty</div>";
+        updateBill(0,0);
+        return;
+    }
+
+    cart.forEach((item,i)=>{
+        items += item.qty;
+        subtotal += item.qty * item.price;
+
+        box.innerHTML += `
+        <div class="product">
+            <img src="${item.image}">
+
+            <div class="product-info">
+                <h4>${item.name}</h4>
+                <p>₹${item.price}</p>
+                <div class="qty">
+                    <button class="minus" onclick="updateQty(${i},-1)">-</button>
+                    <strong>${item.qty}</strong>
+                    <button class="plus" onclick="updateQty(${i},1)">+</button>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    updateBill(items, subtotal);
+}
+
+function updateBill(items, subtotal){
+    let discount = Math.round(subtotal * 0.1);
+    let total = subtotal ? subtotal - discount + 30 : 0;
+
+    itemsEl.textContent = items;
+    subtotalEl.textContent = subtotal;
+    discountEl.textContent = discount;
+    totalEl.textContent = total;
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function updateQty(i,val){
+    cart[i].qty += val;
+    if(cart[i].qty <= 0) cart.splice(i,1);
+    renderCart();
+}
+
+const itemsEl = document.getElementById("items");
+const subtotalEl = document.getElementById("subtotal");
+const discountEl = document.getElementById("discount");
+const totalEl = document.getElementById("total");
+
+renderCart();
+</script>
+
+</body>
+</html>

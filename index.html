@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Zepto Clone</title>
+    <link rel="icon" href="images/favicon.jpg">
+    <link rel="stylesheet" href="common.css">
+
+    <style>
+        /* ===== LOGIN MODAL ===== */
+.login-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:2000;
+}
+
+.login-box{
+    width:780px;
+    height:430px;
+    background:#fff;
+    display:flex;
+    border-radius:18px;
+    overflow:hidden;
+    position:relative;
+}
+
+/* CLOSE */
+.close-login{
+    position:absolute;
+    top:12px;
+    right:16px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* LEFT SIDE */
+.login-left{
+    flex:1;
+    background:linear-gradient(135deg,#6a00ff,#8e2de2);
+    padding:35px;
+    color:#fff;
+}
+
+.login-left h1{
+    font-size:36px;
+    margin-bottom:20px;
+}
+
+.login-left h2{
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.login-left input{
+    width:100%;
+    padding:14px;
+    border-radius:25px;
+    border:none;
+    margin-bottom:15px;
+    font-size:14px;
+}
+
+/* CONTINUE */
+.continue-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:25px;
+    background:#ff4d6d;
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+/* COMMON OVERLAY */
+.login-modal,
+.otp-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+/* OTP BOX */
+.otp-box-main{
+    background:#6a0572;
+    width:750px;
+    display:flex;
+    border-radius:18px;
+    overflow:hidden;
+    color:white;
+}
+
+.otp-left{
+    flex:1;
+    padding:40px;
+}
+
+.otp-inputs{
+    display:flex;
+    gap:10px;
+    margin:25px 0;
+}
+
+.otp-inputs input{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    border:none;
+    text-align:center;
+    font-size:18px;
+}
+
+#otpTimer{
+    margin-bottom:15px;
+}
+
+
+/* ADMIN BUTTON */
+.admin-btn{
+    width:100%;
+    padding:14px;
+    border:2px solid #fff;
+    border-radius:25px;
+    background:transparent;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+}
+
+/* TERMS */
+.terms{
+    font-size:12px;
+    margin-top:15px;
+}
+.terms span{
+    text-decoration:underline;
+}
+
+/* RIGHT SIDE */
+.login-right{
+    flex:1;
+    padding:0px;
+    text-align:center;
+}
+
+.login-right img{
+    width:100%;
+   
+}
+
+       
+       
+        /* ===== CATEGORY ROW ===== */
+.category-row{
+    display:flex;
+    gap:22px;
+    padding:25px 40px;
+    overflow-x:auto;
+}
+
+.category-row::-webkit-scrollbar{
+    display:none;
+}
+
+.category-card{
+    text-decoration:none;
+    text-align:center;
+    color:#444;
+    min-width:90px;
+}
+
+.category-card img{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:14px;
+    background:#f4f4f4;
+    padding:8px;
+}
+
+.category-card p{
+    margin-top:6px;
+    font-size:13px;
+}
+
+/* Hover effect */
+.category-card:hover p{
+    color:#6a00ff;
+    font-weight:600;
+}
+
+
+
+/* ===== SALE POSTERS ===== */
+.sale-posters{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    padding:10px 20px 30px;
+}
+
+.poster-card{
+    border-radius:18px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.poster-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* Hover animation */
+.poster-card:hover{
+    transform:scale(1.04);
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+.search-animate{
+    animation: slideFade 0.5s ease;
+}
+
+@keyframes slideFade{
+    0%{
+        opacity:0;
+        transform: translateY(8px);
+    }
+    100%{
+        opacity:1;
+        transform: translateY(0);
+    }
+}
+
+
+ </style>
+</head>
+
+<body>
+
+<header>
+
+    <!-- TOP HEADER -->
+    <div class="top-header">
+        <a href="index.html" class="logo">zepto</a>
+
+       <!-- LOCATION MODAL -->
+        <div class="location" onclick="openModal()">📍 Select Location</div>
+<div class="modal" id="locationModal">
+    <div class="modal-box">
+        <div class="close-btn" onclick="closeModal()">✖</div>
+        <h3>Select your location</h3>
+
+        <input type="text" placeholder="Search area, city..." id="locationInput">
+
+        <div class="use-live" onclick="getLiveLocation()">📍 Use Live Location</div>
+    </div>
+</div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search for Apple">
+
+            <span>🔍</span>
+        </div>
+
+        <div class="right-icons">
+            <a href="javascript:void(0)" onclick="openLoginModal()">
+            <span>👤</span>
+             Login
+            </a>
+
+            <a href="pages/cart.html">
+                <span>🛒</span>
+                Cart
+            </a>
+
+            <a href="pages/profile.html">
+                <span>⚙️</span>
+                Profile
+            </a>
+           
+        </div>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-item active"><span>👜</span>All</a>
+<a href="pages/cafe.html" class="nav-item"><span>☕</span>Cafe</a>
+<a href="pages/home.html" class="nav-item"><span>🏠</span>Home</a>
+<a href="pages/toys.html" class="nav-item"><span>🧸</span>Toys</a>
+<a href="pages/fresh.html" class="nav-item"><span>🥦</span>Fresh</a>
+
+<a href="pages/meat.html" class="nav-item"><span>🍗</span>Meat</a>
+<a href="pages/icecream.html" class="nav-item"><span>🍨</span>Ice Cream</a>
+<a href="pages/packaged_food.html" class="nav-item"><span>📦</span>Packaged Food</a>
+<a href="pages/dairy.html" class="nav-item"><span>🥛</span>Dairy</a>
+
+<a href="pages/electronics.html" class="nav-item"><span>🎧</span>Electronics</a>
+<a href="pages/chocolate.html" class="nav-item"><span>🍫</span>Chocolates</a>
+<a href="pages/beauty.html" class="nav-item"><span>💄</span>Beauty</a>
+<a href="pages/fashion.html" class="nav-item"><span>👕</span>Fashion</a>
+    </nav>
+
+</header>
+
+<!-- CATEGORY ROW -->
+<section class="category-row">
+
+    <a href="pages/dairy.html" class="category-card">
+        <img src="images/dairy.jpg" alt="Dairy">
+        <p>Dairy</p>
+    </a>
+
+    <a href="pages/fresh.html" class="category-card">
+        <img src="images/fruits.jpg" alt="Fresh">
+        <p>Fresh</p>
+    </a>
+    <a href="pages/meat.html" class="category-card">
+        <img src="images/meat.jpg" alt="Meat">
+        <p>Meat</p>
+    </a>
+
+    <a href="pages/packaged_food.html" class="category-card">
+        <img src="images/packaged.jpg" alt="Packaged Food">
+        <p>Packaged food</p>
+    </a>
+
+    <a href="pages/icecream.html" class="category-card">
+        <img src="images/icecream.jpg" alt="Icecream">
+        <p>Icecream</p>
+    </a>
+
+
+    <a href="pages/home.html" class="category-card">
+        <img src="images/home.jpg" alt="Home">
+        <p>Home</p>
+    </a>
+
+    <a href="pages/cafe.html" class="category-card">
+        <img src="images/cafe.jpg" alt="Cafe">
+        <p>Cafe</p>
+    </a>
+
+    <a href="pages/toys.html" class="category-card">
+        <img src="images/toys.jpg" alt="Toys">
+        <p>Toys</p>
+    </a>
+
+    <a href="pages/electronics.html" class="category-card">
+        <img src="images/electronics.jpg" alt="Electronics">
+        <p>Electronics</p>
+    </a>
+
+    <a href="pages/chocolate.html" class="category-card">
+        <img src="images/cadbury.jpg" alt="Chocolate">
+        <p>Chocolates</p>
+    </a>
+
+    <a href="pages/beauty.html" class="category-card">
+        <img src="images/beauty.jpg" alt="Beauty">
+        <p>Beauty</p>
+    </a>
+
+    <a href="pages/fashion.html" class="category-card">
+        <img src="images/fashion.jpg" alt="Fashion">
+        <p>Fashion</p>
+    </a>
+
+</section>
+
+<!-- SALE POSTERS -->
+<section class="sale-posters">
+
+    <div class="poster-card">
+        <img src="images/poster1.jpg" alt="Zepto Sale 1">
+    </div>
+
+    <div class="poster-card">
+        <img src="images/poster2.jpg" alt="Zepto Sale 2">
+    </div>
+
+</section>
+<section class="sale-posters">
+
+    <div class="poster-card">
+        <img src="images/poster4.jpg" alt="Zepto Sale 3">
+    </div>
+
+    <div class="poster-card">
+        <img src="images/poster5.jpg" alt="Zepto Sale 4">
+    </div>
+
+</section>
+
+<section class="how-it-works">
+    <h2>How it Works</h2>
+
+    <div class="how-cards">
+
+        <div class="how-card">
+            <img src="images/open-app.jpg">
+            <h3>Open the app</h3>
+            <p>Choose from over 7000 products across groceries, fruits, veggies, meat, beauty & more</p>
+        </div>
+
+        <div class="how-card">
+            <img src="images/place-order.jpg">
+            <h3>Place an order</h3>
+            <p>Add your favourite items to the cart & avail the best offers</p>
+        </div>
+
+        <div class="how-card">
+            <img src="images/free-delivery.jpg">
+            <h3>Get free delivery</h3>
+            <p>Experience lightning-fast delivery in just 10 minutes</p>
+        </div>
+
+    </div>
+</section>
+
+<footer class="zepto-footer">
+
+    <!-- POPULAR SEARCHES -->
+    <div class="footer-top">
+        <p><strong>Popular Searches</strong></p>
+        <p>Products: Milk, Bread, Chocolate, Ice Cream</p>
+        <p>Brands: Amul, Cadbury, Nestle, Haldiram</p>
+        <p>Categories: Fruits, Vegetables, Dairy, Snacks</p>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="footer-categories">
+        <strong>Categories</strong>
+        <p>Fresh Fruits | Vegetables | Dairy | Healthcare | Fashion | Electronics | Toys</p>
+    </div>
+
+    <hr>
+
+    <!-- MAIN FOOTER -->
+    <div class="footer-main">
+
+        <div>
+            <h3 class="footer-logo">zepto</h3>
+            <p>India’s fastest delivery app</p>
+        </div>
+
+        <div>
+            <strong>Marketplace</strong>
+            <p>Groceries</p>
+            <p>Fresh</p>
+            <p>Fashion</p>
+        </div>
+
+        <div>
+            <strong>Download App</strong><br>
+           <a href="https://play.google.com/store/search?q=zepto&c=apps" target="_blank"> 
+            <img src="images/playstore.jpg" width="30"></a><br>
+
+            <a href="https://apps.apple.com/in/search?term=zepto" target="_blank">
+            <img src="images/appstore.jpg" width="30"></a>
+        </div>
+
+        <div>
+            <strong>Company</strong>
+            <p>Home</p>
+            <p>Experiences</p>
+            <p>Services</p>
+            <p>Delivery</p>
+        </div>
+
+        <div>
+            <strong>Follow Us</strong><br>
+            <img src="images/instagram.jpg" width="24">&nbsp;
+            <img src="images/facebook.jpg" width="24">&nbsp;
+            <img src="images/twitter.jpg" width="24">
+        </div>
+
+    </div>
+
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="login-modal" id="loginModal">
+
+    <div class="login-box">
+
+        <span class="close-login" onclick="closeLoginModal()">✖</span>
+
+        <div class="login-left">
+            <h1>zepto</h1>
+            <h2>Lowest Prices Everyday<br>in 10 minutes*</h2>
+
+            <input type="text" placeholder="+91 Enter Phone Number">
+
+            <button class="continue-btn">Continue</button>
+
+            <!-- EXTRA ADMIN BUTTON -->
+            <button class="admin-btn">Login as Admin</button>
+
+            <p class="terms">
+                By continuing, you agree to our
+                <span>Terms of Service</span> & <span>Privacy Policy</span>
+            </p>
+        </div>
+
+        <div class="login-right">
+            <img src="images/poster3.jpg" alt="poster bg">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- OTP MODAL -->
+<div class="otp-modal" id="otpModal">
+
+    <div class="otp-box-main">
+
+        <span class="close-login" onclick="closeOTPModal()">✖</span>
+
+        <div class="otp-left">
+            <h2>OTP Verification</h2>
+            <p>OTP has been sent to <span id="displayPhone"></span></p>
+
+            <div class="otp-inputs">
+                <input maxlength="1">
+                <input maxlength="1">
+                <input maxlength="1">
+                <input maxlength="1">
+                <input maxlength="1">
+                <input maxlength="1">
+            </div>
+
+            <p id="otpTimer">00:30</p>
+
+            <button class="continue-btn" onclick="verifyOTP()">Verify OTP</button>
+        </div>
+
+        <div class="login-right">
+            <img src="images/poster3.jpg">
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<script>
+
+    const suggestions = [
+    "Apple 🍎",
+    "Milk 🥛",
+    "Bread 🍞",
+    "Chocolate 🍫",
+    "Ice Cream 🍨",
+    "Vegetables 🥦"
+];
+
+let index = 0;
+const input = document.getElementById("searchInput");
+
+setInterval(() => {
+    input.classList.remove("search-animate");
+
+    setTimeout(() => {
+        input.placeholder = `Search for ${suggestions[index]}`;
+        input.classList.add("search-animate");
+
+        index = (index + 1) % suggestions.length;
+    }, 200);
+
+}, 2500);
+
+    //login
+    
+function openLoginModal(){
+    document.getElementById("loginModal").style.display="flex";
+}
+
+function closeLoginModal(){
+    document.getElementById("loginModal").style.display="none";
+   }
+
+/* CONTINUE → OTP */
+document.querySelector(".continue-btn").addEventListener("click",()=>{
+    const phoneInput = document.querySelector(".login-left input").value;
+
+    if(phoneInput.length !== 10){
+        alert("Enter valid phone number");
+        return;
+    }
+
+    document.getElementById("loginModal").style.display="none";
+    document.getElementById("otpModal").style.display="flex";
+    document.getElementById("displayPhone").innerText = "+91 " + phoneInput;
+
+    startOTPTimer();
+});
+
+/* OTP CLOSE */
+function closeOTPModal(){
+    document.getElementById("otpModal").style.display="none";
+}
+
+/* VERIFY OTP */
+function verifyOTP(){
+    alert("✅ You are successfully logged in!");
+    location.reload();   // reload main page
+}
+/* OTP TIMER */
+let time = 30;
+function startOTPTimer(){
+    time = 30;
+    const timer = document.getElementById("otpTimer");
+
+    const interval = setInterval(()=>{
+        timer.innerText = `00:${time}`;
+        time--;
+
+        if(time < 0){
+            clearInterval(interval);
+            timer.innerText = "Resend OTP";
+        }
+    },1000);
+}
+
+/* AUTO MOVE OTP INPUT */
+document.querySelectorAll(".otp-inputs input").forEach((input,idx,arr)=>{
+    input.addEventListener("input",()=>{
+        if(input.value && arr[idx+1]){
+            arr[idx+1].focus();
+        }
+    });
+});
+//location
+    function openModal(){
+        document.getElementById("locationModal").style.display = "flex";
+    }
+
+    function closeModal(){
+        document.getElementById("locationModal").style.display = "none";
+    }
+
+    // Manual location selection
+    document.getElementById("locationInput").addEventListener("change", function(){
+        document.querySelector(".location").innerText = "📍 " + this.value;
+        closeModal();
+    });
+
+    // Live location
+    function getLiveLocation(){
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(pos => {
+                const lat = pos.coords.latitude.toFixed(3);
+                const lon = pos.coords.longitude.toFixed(3);
+                document.querySelector(".location").innerText =
+                    `📍 Lat ${lat}, Lng ${lon}`;
+                closeModal();
+            }, () => {
+                alert("Location access denied");
+            });
+        } else {
+            alert("Geolocation not supported");
+        }
+    }
+
+
+    //items
+    const items = document.querySelectorAll(".nav-item");
+
+    items.forEach(item => {
+        item.addEventListener("click", () => {
+            items.forEach(i => i.classList.remove("active"));
+            item.classList.add("active");
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

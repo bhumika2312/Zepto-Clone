@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Track Order | Zepto Clone</title>
+    <link rel="icon" href="../images/favicon.jpg">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body{
+            background:#fff;
+            min-height:100vh;
+        }
+
+        /* HEADER */
+        header{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:15px 20px;
+            border-bottom:1px solid #eee;
+        }
+
+        .left-head{
+            display:flex;
+            align-items:center;
+            gap:12px;
+        }
+
+        .back-btn{
+            font-size:20px;
+            cursor:pointer;
+        }
+
+        header h2{
+            font-size:18px;
+            font-weight:600;
+        }
+
+        .right-head{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            font-size:13px;
+            color:#6a00ff;
+        }
+
+        .help-btn{
+            border:1px solid #ddd;
+            padding:5px 12px;
+            border-radius:20px;
+            cursor:pointer;
+        }
+
+        /* MAIN CARD */
+        .tracking-card{
+            max-width:420px;
+            margin:25px auto;
+            border-radius:24px;
+            overflow:hidden;
+            box-shadow:0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        /* TOP GRADIENT */
+        .card-top{
+            background:linear-gradient(135deg,#4b0082,#7b2cff,#ff5fa2);
+            color:white;
+            padding:25px 20px 30px;
+            text-align:center;
+        }
+
+        .timer{
+            width:160px;
+            height:160px;
+            margin:0 auto 15px;
+            border-radius:50%;
+            background:conic-gradient(#ff4f87 0deg, #ff4f87 270deg, rgba(255,255,255,0.25) 270deg);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .timer-inner{
+            width:120px;
+            height:120px;
+            background:white;
+            border-radius:50%;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .timer-inner span{
+            font-size:13px;
+            color:#777;
+        }
+
+        .timer-inner h3{
+            font-size:26px;
+            color:#6a00ff;
+        }
+
+        .status-steps{
+            display:flex;
+            justify-content:space-between;
+            font-size:12px;
+            margin-top:10px;
+        }
+
+        .status-steps span{
+            opacity:0.6;
+        }
+
+        .status-steps .active{
+            font-weight:600;
+            opacity:1;
+        }
+
+        /* BOTTOM WHITE */
+        .card-bottom{
+            background:white;
+            padding:20px;
+        }
+
+        .progress-bar{
+            height:6px;
+            background:#eee;
+            border-radius:10px;
+            overflow:hidden;
+            margin-bottom:15px;
+        }
+
+        .progress{
+            width:65%;
+            height:100%;
+            background:linear-gradient(to right,#6a00ff,#ff5fa2);
+        }
+
+        .order-msg{
+            background:#f3edff;
+            padding:12px;
+            border-radius:10px;
+            font-size:14px;
+            color:#6a00ff;
+            margin-bottom:12px;
+        }
+
+        .info-row{
+            font-size:13px;
+            color:#555;
+            margin-bottom:8px;
+        }
+
+        /* AD */
+        .ad{
+            margin-top:15px;
+        }
+
+        .ad img{
+            width:100%;
+            border-radius:14px;
+        }
+
+        /* OFFER */
+        .offer{
+            display:flex;
+            gap:12px;
+            margin-top:15px;
+            background:#fff5fa;
+            padding:12px;
+            border-radius:14px;
+        }
+
+        .offer img{
+            width:60px;
+        }
+
+        .offer h4{
+            font-size:14px;
+        }
+
+        .offer p{
+            font-size:12px;
+            color:#777;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="left-head">
+        <a href="cart.html" class="back-btn">←</a>
+        <h2>Back</h2>
+    </div>
+
+    <div class="right-head">
+        <span>📞 1800-123-ZEPTO</span>
+        <div class="help-btn">Get Help</div>
+    </div>
+</header>
+
+<div class="tracking-card">
+
+    <!-- TOP -->
+    <div class="card-top">
+        <div class="timer">
+            <div class="timer-inner">
+                <span>ARRIVING IN</span>
+                <h3 id="time">20:51</h3>
+            </div>
+        </div>
+
+        <div class="status-steps">
+            <span class="active">Confirmed</span>
+            <span class="active">On the way</span>
+            <span>Arrived</span>
+        </div>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="card-bottom">
+
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+
+        <div class="order-msg">🛒 Your order is being packed</div>
+
+        <div class="info-row">📦 3 Items | 💰 ₹105 saved</div>
+        <div class="info-row">📍 Delivering to: Home – 4th Floor</div>
+
+        <!-- AD IMAGE -->
+        <div class="ad">
+            <img src="../images/cart-banner.jpg" alt="Advertisement">
+        </div>
+
+        <!-- OFFER -->
+        <div class="offer">
+            <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
+            <div>
+                <h4>Boat Days</h4>
+                <p>Up to 50% off on headphones</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+let m = 20, s = 51;
+setInterval(()=>{
+    if(s===0){
+        if(m===0) return;
+        m--; s=59;
+    } else s--;
+    document.getElementById("time").innerText =
+        `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+},1000);
+</script>
+
+</body>
+</html>
